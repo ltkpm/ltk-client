@@ -1,17 +1,33 @@
-var ClientLtk = require("Client").Client
+var ClientLtk = require("./Client").Client;
 
 class Manager {
-    var client = new ClientLtk()
+  constructor() {
+    this.client = new ClientLtk();
+  }
 
-    install(package_name,global) {
-        let repo = client.getPackage(package_name)    
-    }
+  install(repo_name, global) {
+    let repo;
+    repo = this.client.getRepository(repo_name);
+    repo.then(function(response) {
+      console.log(response);
+      if (repo) {
+        console.log(repo.name);
+        if (repo.type == "Npm") installNodeRepo();
+      }
+    });
+  }
 
-    remove(package,global) {
+  remove(repo, global) {}
 
-    }
+  register() {}
 
-    register() {
+  installNodeRepo() {
+    console.log("Node Repo");
+  }
 
-    }
+  installPipRepo() {
+    console.log("Pip Repo");
+  }
 }
+
+module.exports.Manager = Manager;

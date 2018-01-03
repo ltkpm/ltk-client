@@ -1,16 +1,21 @@
-var axios = require("axios");
-var server = require("../server_url.json");
-var Repository = require("../Model/Repository")
+var axios = require("axios")
+var server = require("../server_url.json")
+var Repository = require("../Model/Repository").Repository
 
 class Client {
-    
-    const URL = server.url+"/api/" 
+  constructor() {
+    this.URL = server.url + "/api"
+  }
 
-    getpackage(package_name) {
-        let repo = new Repository(axios.get(URL+/package_name)) 
-        console.log(response)
-    }
-
+  getRepository(repo_name) {
+    var url = this.URL + "/repos/" + repo_name
+    var p = new Promise(function(resolve, reject) {
+        axios.get(url).then(function(response) {
+            resolve(new Repository(response.data))
+        });
+    })
+    return p;
+  }
 }
 
-module.exports.Client = Client
+module.exports.Client = Client;

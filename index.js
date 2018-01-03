@@ -1,30 +1,30 @@
 #!/usr/bin/env node
 
 var program = require("commander")
-var Manager = require("Manager")
+var Manager = require("./cli/Manager").Manager
 
-var packageManager = new Manager()
+var repoManager = new Manager()
 
 program
   .option("-g, --global", "global installation")
-  .command("install <package>")
-  .action(function(package) {
-    console.log(package);
+  .command("install <repo>")
+  .action(function(repo) {
+    console.log(repo);
+    repoManager.install(repo);
   });
 
 program
   .option("-g, --global", "global installation")
-  .command("remove <package>")
-  .action(function(package) {
-    console.log(package);
-    packageManager.
+  .command("remove <repo>")
+  .action(function(repo) {
+    console.log(repo);
   });
 
 program
   .option("-g, --global", "global installation")
-  .command("register <package>")
-  .action(function(package) {
-    console.log(package);
+  .command("register <repo>")
+  .action(function(repo) {
+    console.log(repo);
   });
 
 
