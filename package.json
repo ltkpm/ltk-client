@@ -1,0 +1,16 @@
+{
+  "name": "ltk-client",
+  "version": "1.0.0",
+  "description": "Ltk client for private repo system",
+  "main": "index.js",
+  "repository": "git@bitbucket.org:lotrek-tea/ltk-client.git",
+  "author": "Lotrèk Digital Agency",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {},
+  "dependencies": {
+    "axios": "^0.17.1",
+    "commander": "^2.12.2",
+    "inquirer": "^4.0.2"
+  }
+}
