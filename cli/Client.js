@@ -1,6 +1,7 @@
 var axios = require("axios")
 var server = require("../server_url.json")
-var Repository = require("../Model/Repository").Repository
+var Repository = require("../Model/Repository").Repository;
+
 
 class Client {
   constructor() {
@@ -11,7 +12,7 @@ class Client {
     var url = this.URL + "/repos/" + repo_name
     var p = new Promise(function(resolve, reject) {
         axios.get(url).then(function(response) {
-            resolve(new Repository(response.data))
+            resolve(new Repository(response.data));
         });
     })
     return p;

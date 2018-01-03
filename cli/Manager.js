@@ -7,12 +7,19 @@ class Manager {
 
   install(repo_name, global) {
     let repo;
-    repo = this.client.getRepository(repo_name);
-    repo.then(function(response) {
-      console.log(response);
+    let result = this.client.getRepository(repo_name);
+    result.then((response) => {
+      repo = response
+      console.log(repo.type)
       if (repo) {
-        console.log(repo.name);
-        if (repo.type == "Npm") installNodeRepo();
+        switch (repo.type) {
+            case "npm":
+                this.installNodeRepository()
+                break;
+        
+            default:
+                break;
+        }
       }
     });
   }
@@ -21,12 +28,8 @@ class Manager {
 
   register() {}
 
-  installNodeRepo() {
-    console.log("Node Repo");
-  }
-
-  installPipRepo() {
-    console.log("Pip Repo");
+  installNodeRepository() {
+      console.log('Humaniiiii')
   }
 }
 
