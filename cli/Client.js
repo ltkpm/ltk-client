@@ -1,11 +1,11 @@
 var axios = require("axios")
-var server = require("../server_url.json")
+var preferences = require("../preferences.json")
 var Repository = require("../Model/Repository").Repository;
 
 
 class Client {
   constructor() {
-    this.URL = server.url + "/api"
+    this.URL = preferences.url + "/api"
     axios.defaults.headers.post['Content-Type'] = 'application/json'
   }
 
