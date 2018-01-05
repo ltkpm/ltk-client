@@ -1,5 +1,6 @@
 var ClientLtk = require("./Client").Client
 var execa = require("execa")
+var preferences = require("../preferences.json")
 
 class Manager {
   constructor() {
@@ -28,10 +29,10 @@ class Manager {
     result.then(repo => {
       switch (repo.type) {
         case "node":
-          this.removeNodeRepository(repo.name,scope)
+          this.removeNodeRepository(repo.name, scope)
           break
         case "python":
-          this.removePythonRepository(repo.name,scope)
+          this.removePythonRepository(repo.name)
           break
       }
     })
@@ -43,9 +44,13 @@ class Manager {
 
   installNodeRepository(repo_url, scope) {
     const npmInstall = "npm install "
-    let options = this.getScope(scope)
-    let command =
-      npmInstall + options[0] + this.addPrefixUrl(repo_url) + options[1]
+    console.log(scope)
+    let command = this.getCommand(
+      preferences.default_node_manager,
+      scope,
+      "install",
+      repo_url
+    )
     console.log("Wait, installing dependency")
     execa.shell(command).then(result => {
       console.log(command)
@@ -55,7 +60,12 @@ class Manager {
 
   installPyRepository(repo_url) {
     const pipInstall = "pip install "
-    let command = pipInstall + this.addPrefixUrl(repo_url)
+    let command = this.getCommand(
+      preferences.default_python_manager,
+      scope,
+      "install",
+      repo_url
+    )
     console.log("Wait, installing dependency")
     execa.shell(command).then(result => {
       console.log(result.stdout)
@@ -64,8 +74,12 @@ class Manager {
 
   removeNodeRepository(repo_name, scope) {
     const npmRemove = "npm remove "
-    let options = this.getScope(scope)
-    let command = npmRemove + options[0] + repo_name + options[1]
+    let command = this.getCommand(
+      preferences.default_node_manager,
+      scope,
+      "remove",
+      repo_name
+    )
     console.log("Wait, removing dependency")
     execa.shell(command).then(result => {
       console.log(command)
@@ -74,7 +88,12 @@ class Manager {
   }
 
   removePythonRepository(repo_name) {
-    const pipInstall = "pip remove " + repo_name
+    let command = this.getCommand(
+      preferences.default_python_manager,
+      scope,
+      "remove",
+      repo_url
+    )
     console.log("Wait, removing dependency")
     execa.shell(command).then(result => {
       console.log(result.stdout)
@@ -105,6 +124,41 @@ class Manager {
     }
 
     return result
+  }
+
+  getCommand(installer, scope, operation, repo_url) {
+    console.log("scope " + scope)
+    const installation_command = [
+      {
+        yarn: {
+          install: "yarn add ",
+          remove: "yarn remove "
+        },
+        npm: {
+          install: "npm install ",
+          remove: "npm remove "
+        },
+        pip: {
+          install: "pip install ",
+          remove: "pip remove "
+        }
+      }
+    ]
+    let options = undefined
+    let command = undefined
+    let repo = undefined
+
+    if (operation == "remove") {
+      repo = repo_url
+    } else {
+      repo = this.addPrefixUrl(repo_url)
+    }
+    if (installer != "pip") {
+      options = this.getScope(scope)
+    }
+    command = installation_command[0][installer][operation] + options[0] + repo
+    console.log(command)
+    return command
   }
 }
 
