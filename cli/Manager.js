@@ -28,10 +28,10 @@ class Manager {
     result.then(repo => {
       switch (repo.type) {
         case "node":
-          this.removeNodeRepository(repo.name)
+          this.removeNodeRepository(repo.name,scope)
           break
         case "python":
-          this.removePythonRepository(repo.name)
+          this.removePythonRepository(repo.name,scope)
           break
       }
     })
@@ -63,13 +63,12 @@ class Manager {
   }
 
   removeNodeRepository(repo_name, scope) {
-    const npmInstall = "npm remove "
+    const npmRemove = "npm remove "
     let options = this.getScope(scope)
-    let command = npmInstall + options[0] + repo_name + options[1]
+    let command = npmRemove + options[0] + repo_name + options[1]
     console.log("Wait, removing dependency")
     execa.shell(command).then(result => {
       console.log(command)
-
       console.log(result.stdout)
     })
   }
@@ -97,7 +96,6 @@ class Manager {
 
   getScope(scope) {
     let result = ["", ""]
-    const npmInstall = "npm install "
     if (scope == 1) {
       result[0] = "-g "
     } else if (scope == 2) {
