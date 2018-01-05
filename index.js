@@ -7,10 +7,17 @@ var repoManager = new Manager()
 
 program
   .option("-g, --global", "global installation")
+  .option("-s, --save", "save to local folder")
   .command("install <repo>")
   .action(function(repo) {
-    console.log(repo);
-    repoManager.install(repo);
+    let scope = undefined
+    if(program.save){
+      scope = 2
+    }
+    else {
+      scope = 1
+    }
+    repoManager.install(repo,scope)
   });
 
 program
