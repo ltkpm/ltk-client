@@ -7,10 +7,10 @@
   "author": "Lotrèk Digital Agency",
   "license": "MIT",
   "private": true,
-  "devDependencies": {},
   "dependencies": {
     "axios": "^0.17.1",
     "commander": "^2.12.2",
+    "execa": "^0.8.0",
     "inquirer": "^4.0.2"
   }
 }
