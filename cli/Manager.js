@@ -7,10 +7,8 @@ class Manager {
   }
 
   install(repo_name, global) {
-    let repo
     let result = this.client.getRepository(repo_name.toLowerCase())
-    result.then(response => {
-      repo = response
+    result.then(repo => {
       if (repo) {
         switch (repo.type) {
           case "node":
@@ -25,7 +23,19 @@ class Manager {
     })
   }
 
-  remove(repo, scope) {}
+  remove(repo_name, scope) {
+    let result = this.client.getRepository(repo_name.toLowerCase())
+    result.then(repo => {
+      switch (repo.type) {
+        case "node":
+          this.removeNodeRepository(repo.name)
+          break
+        case "python":
+          this.removePythonRepository(repo.name)
+          break
+      }
+    })
+  }
 
   register(repo) {
     this.client.addRepository(repo)
@@ -34,10 +44,11 @@ class Manager {
   installNodeRepository(repo_url, scope) {
     const npmInstall = "npm install "
     let options = this.getScope(scope)
-    let command = npmInstall + options[0] + this.addPrefixUrl(repo_url) + options[1]
+    let command =
+      npmInstall + options[0] + this.addPrefixUrl(repo_url) + options[1]
+    console.log("Wait, installing dependency")
     execa.shell(command).then(result => {
       console.log(command)
-      console.log("Wait, installing dependency")
       console.log(result.stdout)
     })
   }
@@ -45,8 +56,28 @@ class Manager {
   installPyRepository(repo_url) {
     const pipInstall = "pip install "
     let command = pipInstall + this.addPrefixUrl(repo_url)
+    console.log("Wait, installing dependency")
     execa.shell(command).then(result => {
-      console.log("Wait, installing dependency")
+      console.log(result.stdout)
+    })
+  }
+
+  removeNodeRepository(repo_name, scope) {
+    const npmInstall = "npm remove "
+    let options = this.getScope(scope)
+    let command = npmInstall + options[0] + repo_name + options[1]
+    console.log("Wait, removing dependency")
+    execa.shell(command).then(result => {
+      console.log(command)
+
+      console.log(result.stdout)
+    })
+  }
+
+  removePythonRepository(repo_name) {
+    const pipInstall = "pip remove " + repo_name
+    console.log("Wait, removing dependency")
+    execa.shell(command).then(result => {
       console.log(result.stdout)
     })
   }
@@ -70,8 +101,11 @@ class Manager {
     if (scope == 1) {
       result[0] = "-g "
     } else if (scope == 2) {
+      result[1] = " -D"
+    } else if (scope == 3) {
       result[1] = " --save"
     }
+
     return result
   }
 }
