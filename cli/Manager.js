@@ -25,20 +25,16 @@ class Manager {
     })
   }
 
-  remove(repo, global) {}
+  remove(repo, scope) {}
 
-  register() {}
+  register(repo) {
+    this.client.addRepository(repo)
+  }
 
   installNodeRepository(repo_url, scope) {
-    let global = "",
-      save = ""
     const npmInstall = "npm install "
-    if (scope == 1) {
-      global = "-g "
-    } else if (scope == 2) {
-      save = " --save"
-    }
-    let command = npmInstall + global + this.addPrefixUrl(repo_url) + save
+    let options = this.getScope(scope)
+    let command = npmInstall + options[0] + this.addPrefixUrl(repo_url) + options[1]
     execa.shell(command).then(result => {
       console.log(command)
       console.log("Wait, installing dependency")
@@ -64,6 +60,17 @@ class Manager {
     } else if (repo_url.includes("git@")) {
       result =
         gitPrefix + sshPrefix + "git@bitbucket.org:lotrek-tea/ltk-test.git"
+    }
+    return result
+  }
+
+  getScope(scope) {
+    let result = ["", ""]
+    const npmInstall = "npm install "
+    if (scope == 1) {
+      result[0] = "-g "
+    } else if (scope == 2) {
+      result[1] = " --save"
     }
     return result
   }
