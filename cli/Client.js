@@ -11,12 +11,17 @@ class Client {
 
   getRepository(repo_name) {
     let url = this.URL + "/repos/" + repo_name
-    let p = new Promise(function(resolve, reject) {
-      axios.get(url).then(function(response) {
-        resolve(new Repository(response.data))
-      })
+    let responsePromise = new Promise(function(resolve, reject) {
+      axios
+        .get(url)
+        .then(function(response) {
+          resolve(new Repository(response.data))
+        })
+        .catch(response => {
+          console.log("Something wrong happen! Reason "+response)
+        })
     })
-    return p
+    return responsePromise
   }
 
   addRepository(repo) {
@@ -32,6 +37,7 @@ class Client {
           result = "Yay, registered correctly! "
           break;     
       }
+
       console.log(result)
     }).catch((response)=>{
       console.log("Something wrong happen! Reason " )
