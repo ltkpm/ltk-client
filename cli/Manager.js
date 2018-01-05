@@ -1,6 +1,10 @@
 var ClientLtk = require("./Client").Client
 var execa = require("execa")
-var preferences = require("../preferences.json")
+var os = require("os")
+var preference_file = require("../package.json").preference_file
+let homedir = os.userInfo().homedir + "/ltk/" + preference_file
+console.log("grg "+homedir)
+var preferences = require(homedir)
 
 class Manager {
   constructor() {
