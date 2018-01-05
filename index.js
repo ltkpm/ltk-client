@@ -8,23 +8,33 @@ var repoManager = new Manager()
 
 program
   .option("-g, --global", "global installation")
-  .option("-s, --save", "save to local folder")
+  .option("-d, --dev", "save to local folder")
   .command("install <repo>")
   .action(function(repo) {
-    let scope = undefined
-    if (program.save) {
-      scope = 2
-    } else {
-      scope = 1
-    }
-    repoManager.install(repo, scope)
+    repoManager.install(repo, getScope(program.dev, program.global))
   })
 
 program
   .option("-g, --global", "global installation")
-  .command("remove <repo>")
-  .action(function(repo) {
-    console.log(repo)
+  .option("-d --dev", "save to local folder")
+  .command("remove [name]")
+  .action(function(name) {
+    if (name != undefined) repoManager.remove(name, getScope(program.dev,program.global))
+    else {
+      var questions = [
+        {
+          type: "input",
+          name: "name",
+          message: "The name of repository you want remove"
+        }
+      ]
+      inquirer.prompt(questions).then(answers => {
+        repoManager.remove(
+          JSON.stringify(answers, null, "  "),
+          getScope(program.dev,program.global)
+        )
+      })
+    }
   })
 
 program.command("register").action(function(repo) {
@@ -32,7 +42,7 @@ program.command("register").action(function(repo) {
     {
       type: "input",
       name: "name",
-      message: "The name of repository",
+      message: "The name of repository"
     },
     { type: "input", name: "url", message: "Url of repository" },
     {
@@ -63,8 +73,12 @@ program.command("register").action(function(repo) {
 
 program.parse(process.argv)
 
-/*
-  install
-  remove
-  register
-  */
+function getScope(dev, global) {
+  let scope = 3
+  if (dev) {
+    scope = 2
+  } else {
+    if (global) scope = 1
+  }
+  return scope
+}
