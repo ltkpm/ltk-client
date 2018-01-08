@@ -1,20 +1,17 @@
 var axios = require("axios")
-var os = require("os")
-var preference_file = require("../package.json").preference_file
-let homedir = os.userInfo().homedir + "/ltk/" + preference_file
-console.log("grg " + homedir)
-var preferences = require(homedir)
-var Repository = require("../Model/Repository").Repository;
-
+var Preferences = require("./Preferences.js").Preferences
+var Repository =  require("../Model/Repository").Repository
 
 class Client {
   constructor() {
-    this.URL = preferences.url + "/api"
+    this.preference = new Preferences()
+    this.URL = this.preference.url + "/api"
     axios.defaults.headers.post['Content-Type'] = 'application/json'
   }
 
   getRepository(repo_name) {
     let url = this.URL + "/repos/" + repo_name
+    console.log(url)
     let responsePromise = new Promise(function(resolve, reject) {
       axios
         .get(url)

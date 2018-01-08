@@ -13,5 +13,5 @@
     "execa": "^0.8.0",
     "inquirer": "^4.0.2"
   },
-  "preference_file" : "preferences.json"
+  "preference_file": "preferences.json"
 }

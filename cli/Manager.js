@@ -1,13 +1,10 @@
 var ClientLtk = require("./Client").Client
+var Preferences = require("./Preferences.js").Preferences
 var execa = require("execa")
-var os = require("os")
-var preference_file = require("../package.json").preference_file
-let homedir = os.userInfo().homedir + "/ltk/" + preference_file
-console.log("grg "+homedir)
-var preferences = require(homedir)
 
 class Manager {
   constructor() {
+    this.preference = new Preferences()
     this.client = new ClientLtk()
   }
 
@@ -49,12 +46,7 @@ class Manager {
   installNodeRepository(repo_url, scope) {
     const npmInstall = "npm install "
     console.log(scope)
-    let command = this.getCommand(
-      preferences.default_node_manager,
-      scope,
-      "install",
-      repo_url
-    )
+    let command = this.getCommand(this.preference.node, scope, "install", repo_url)
     console.log("Wait, installing dependency")
     execa.shell(command).then(result => {
       console.log(command)
@@ -64,12 +56,7 @@ class Manager {
 
   installPyRepository(repo_url) {
     const pipInstall = "pip install "
-    let command = this.getCommand(
-      preferences.default_python_manager,
-      scope,
-      "install",
-      repo_url
-    )
+    let command = this.getCommand(this.preference.python, scope, "install", repo_url)
     console.log("Wait, installing dependency")
     execa.shell(command).then(result => {
       console.log(result.stdout)
@@ -78,12 +65,7 @@ class Manager {
 
   removeNodeRepository(repo_name, scope) {
     const npmRemove = "npm remove "
-    let command = this.getCommand(
-      preferences.default_node_manager,
-      scope,
-      "remove",
-      repo_name
-    )
+    let command = this.getCommand(this.preference.node, scope, "remove", repo_name)
     console.log("Wait, removing dependency")
     execa.shell(command).then(result => {
       console.log(command)
@@ -92,12 +74,7 @@ class Manager {
   }
 
   removePythonRepository(repo_name) {
-    let command = this.getCommand(
-      preferences.default_python_manager,
-      scope,
-      "remove",
-      repo_url
-    )
+    let command = this.getCommand(this.preference.python, scope, "remove", repo_url)
     console.log("Wait, removing dependency")
     execa.shell(command).then(result => {
       console.log(result.stdout)

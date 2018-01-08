@@ -2,6 +2,7 @@
 
 var program = require("commander")
 var Manager = require("./cli/Manager").Manager
+var Preferences = require("./cli/Preferences").Preferences
 var inquirer = require("inquirer")
 const os = require("os")
 const fs = require("fs")
@@ -16,7 +17,8 @@ program
   })
 
 program.command("init").action(function(repo) {
-  var questions = [
+  let preference = new Preferences()
+  let questions = [
     { type: "input", name: "url", message: "Url of your private repos" },
     {
       type: "list",
@@ -37,30 +39,16 @@ program.command("init").action(function(repo) {
       }
     }
   ]
- 
-  let homedir = os.userInfo().homedir + "/ltk/"
-  fs.exists(homedir + require("./package.json").preference_file, exists => {
-    if (!exists) {
-       inquirer.prompt(questions).then(answers => {
-        
-         if (!fs.existsSync(homedir)) {
-           fs.mkdirSync(homedir)
-         }
-         fs.writeFile(
-           homedir + require("./package.json").preference_file,
-           JSON.stringify(answers, null, "  "),
-           function(err) {
-             if (err) {
-               return console.log(err)
-             }
-             console.log("Perfect! Default ")
-           }
-         )
-       })
-    } else {
-      console.log("You have already initialize LTK")
-    }
-  })
+  if (!preference.alredyInit()) {
+    inquirer
+      .prompt(questions)
+      .then(answers => {
+        preference.savePreferences(JSON.stringify(answers, null, "  "))
+      })
+      .catch(error => {
+        console.log(error)
+      })
+  }
 })
 
 program
