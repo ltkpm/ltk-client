@@ -1,6 +1,6 @@
 ## LTK 
 
-A **new way** to save your private repository 
+A **new way** to manage your private repository 
 
 #### What is Ltk
 Ltk is a simple package manager written in nodejs to manage your private repository on your server
