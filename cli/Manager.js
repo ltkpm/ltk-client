@@ -108,7 +108,6 @@ class Manager {
   }
 
   getCommand(installer, scope, operation, repo_url) {
-    console.log("scope " + scope)
     const installation_command = [
       {
         yarn: {
@@ -138,7 +137,6 @@ class Manager {
       options = this.getScope(scope)
     }
     command = installation_command[0][installer][operation] + options[0] + repo
-    console.log(command)
     return command
   }
 }
