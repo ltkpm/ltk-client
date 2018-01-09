@@ -13,5 +13,13 @@
     "execa": "^0.8.0",
     "inquirer": "^4.0.2"
   },
-  "preference_file": "preferences.json"
+  "preference_file": "preferences.json",
+  "devDependencies": {
+    "mocha": "^4.1.0",
+    "moxios": "^0.4.0",
+    "sinon": "^4.1.4"
+  },
+  "scripts": {
+    "test": "mocha --timeout 25000"
+  }
 }
