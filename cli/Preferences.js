@@ -13,21 +13,18 @@ class Preferences {
     this.node = undefined
   }
 
-
   alredyInit() {
     let absUrl = this.path + this.file_name
-      if (!this.folderExist()) {
-        fs.mkdirSync(this.path)
+    if (!this.folderExist()) {
+      fs.mkdirSync(this.path)
+      return false
+    } else {
+      if (!this.fileExist()) {
         return false
+      } else {
+        return true
       }
-      else{
-        if(!this.fileExist()){
-          return false
-        }
-        else{
-          return true
-        }
-      }
+    }
   }
 
   folderExist() {
@@ -46,17 +43,33 @@ class Preferences {
     }
   }
 
-  savePreferences(preferences) {
-    fs.writeFile(this.path + this.file_name, preferences, err => {
-      if (err) {
-        return console.log(err)
+  deletePreferences() {
+    if (this.fileExist()) {
+      fs.unlinkSync(this.path + this.file_name)
+      return true
+    } else {
+      return false
+    }
+  }
+
+  async savePreferences(preferences) {
+    let result = undefined 
+    try{
+      result = await fs.writeFile(this.path + this.file_name, preferences, err => {
+        if (err) {
+        console.error(err)
       } else {
         this.file = require(this.path + this.file_name)
         this.url = this.file.url
         this.python = this.file.default_python_manager
         this.node = this.file.default_node_manager
       }
-    })
+      })
+    }
+    catch(e){
+      console.log(e)
+    }
+    return result
   }
 }
 
