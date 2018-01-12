@@ -3,21 +3,27 @@ var moxios = require("moxios")
 var sinon = require("sinon")
 var packagejson = require("../package.json")
 var Manager = require("../cli/Manager").Manager
-var equal = require("assert").equal
-var assert = require("assert")
+var PreferenceManager = require("../cli/Preferences").Preferences
+var execa = require("execa")
+var expect = require("chai").expect
+var fs = require("fs")
 
 describe("[Node] Test install package", function() {
   const url = "http://localhost:300"
   const packageTest = "ltk-test"
-  let packageManager = new Manager()
+  let packageManager = undefined
 
-  beforeEach(function() {
+  before(function() {
     moxios.install()
+    packageManager = new Manager()
   })
 
-  afterEach(function() {
-    moxios.uninstall()
+  after(function() {
+    //moxios.uninstall()
+    let command = "yarn remove ltk-test"
+    execa.shellSync(command)
   })
+  
 
   it("just for a single spec", function(done) {
     const testPackage = {
@@ -28,29 +34,53 @@ describe("[Node] Test install package", function() {
       hash:
         "6ca47b2cb4d6a1886a6d2ca7d0cf1843450aff12478b7e8d9e10cbed18a81454d8c486c6aff6830428a16bfcd569628d9727924a03d5de8f2a8c632b87830e74"
     }
-
+    packageManager.preference.url = url
+    packageManager.preference.node = "npm"
     moxios.withMock(function() {
       let onFulfilled = sinon.spy()
-      axios.get("/api/repo/" + packageTest).then(onFulfilled)
-
+      axios.get(packageManager.preference.url+"/api/repo/" + packageTest).then(onFulfilled)
       moxios.wait(function() {
         let request = moxios.requests.mostRecent()
-        request
-          .respondWith({ status: 200, response: { testPackage } })
-          .then(function(result) {
-            let installPromise = new Promise(function(resolve, reject) {
-              
-              resolve(packageManager.installNodeRepository(result.data.url))
-            })
-            installPromise
-              .then(result => {
-                console.log("aaa"+result)
-              })
-              .catch(() => {})
-            
-          }).catch(()=>{})
-          done()
+        request.respondWith({ status: 200, response: { testPackage } })
+          .then((result)=>{
+            let urlRepo = result.data.testPackage.url
+            console.log(urlRepo)
+            packageManager.installNodeRepository(urlRepo,3)
+            done()
+          }).catch((error)=>{
+            console.log("error" + error)
+            done()
+          })
       })
     })
   })
+})
+
+describe("Test ltk init", () => {
+  let preference = undefined
+  let defaultPref = {
+    url: "Your Heart",
+    default_node_manager: "npm",
+    default_python_manager: "pip"
+  }
+
+  before(() => {
+    preference = new PreferenceManager()
+  })
+
+  it("Create preferences File", () => {
+    let path = preference.path + preference.file_name
+    preference.deletePreferences()
+    let promiseWrite = preference.savePreferences(JSON.stringify(defaultPref))
+    promiseWrite.then(()=>{
+      expect(fs.existsSync(path)).to.equal(true)
+    })
+  })
+
+  it("File with correct content", () => {
+    let path = preference.path + preference.file_name
+    let content = JSON.stringify(JSON.parse(fs.readFileSync(path)))
+    expect(JSON.stringify(defaultPref)).to.equal(content)
+  })
+
 })
