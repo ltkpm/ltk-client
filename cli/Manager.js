@@ -45,40 +45,33 @@ class Manager {
 
   installNodeRepository(repo_url, scope) {
     const npmInstall = "npm install "
-    console.log(scope)
     let command = this.getCommand(this.preference.node, scope, "install", repo_url)
     console.log("Wait, installing dependency")
-    execa.shell(command).then(result => {
-      console.log(command)
-      console.log(result.stdout)
-    })
+    execa.shellSync(command)
+    console.log("Finished installing dependency")
   }
 
   installPyRepository(repo_url) {
     const pipInstall = "pip install "
     let command = this.getCommand(this.preference.python, scope, "install", repo_url)
     console.log("Wait, installing dependency")
-    execa.shell(command).then(result => {
-      console.log(result.stdout)
-    })
+    execa.shellSync(command)
+    console.log("Finished installing dependency")
   }
 
   removeNodeRepository(repo_name, scope) {
     const npmRemove = "npm remove "
     let command = this.getCommand(this.preference.node, scope, "remove", repo_name)
     console.log("Wait, removing dependency")
-    execa.shell(command).then(result => {
-      console.log(command)
-      console.log(result.stdout)
-    })
+    execa.shellSync(command)
+    console.log("Finished removing dependency")
   }
 
   removePythonRepository(repo_name) {
     let command = this.getCommand(this.preference.python, scope, "remove", repo_url)
     console.log("Wait, removing dependency")
-    execa.shell(command).then(result => {
-      console.log(result.stdout)
-    })
+    execa.shellSync(command)
+    console.log("Finished removing dependency")
   }
 
   addPrefixUrl(repo_url) {
