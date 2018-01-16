@@ -6,7 +6,6 @@
   "repository": "git@bitbucket.org:lotrek-tea/ltk-client.git",
   "author": "Lotrèk Digital Agency",
   "license": "MIT",
-  "private": true,
   "dependencies": {
     "axios": "^0.17.1",
     "commander": "^2.12.2",
@@ -20,7 +19,5 @@
     "moxios": "^0.4.0",
     "sinon": "^4.1.4"
   },
-  "scripts": {
-    "test": "mocha --timeout 25000"
-  }
+  "scripts": { "test": "mocha --timeout 25000" }
 }
