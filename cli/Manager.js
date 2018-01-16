@@ -60,7 +60,6 @@ class Manager {
   }
 
   removeNodeRepository(repo_name, scope) {
-    const npmRemove = "npm remove "
     let command = this.getCommand(this.preference.node, scope, "remove", repo_name)
     console.log("Wait, removing dependency")
     execa.shellSync(command)
