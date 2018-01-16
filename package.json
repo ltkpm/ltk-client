@@ -1,6 +1,6 @@
 {
   "name": "ltk-cli",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "Ltk client for private repo system",
   "main": "index.js",
   "repository": "git@bitbucket.org:lotrek-tea/ltk-client.git",

@@ -60,6 +60,9 @@ class Preferences {
 
   async savePreferences(preferences) {
     let result = undefined 
+    if(!this.folderExist()){
+      this.createFolder()
+    }
     try{
       result = await fs.writeFile(this.path + this.file_name, preferences, err => {
         if (err) {
