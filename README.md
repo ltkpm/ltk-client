@@ -1,4 +1,5 @@
-## LTK 
+## LTK    
+[![Build Status](https://travis-ci.org/ltkpm/ltk-client.svg?branch=master)](https://travis-ci.org/ltkpm/ltk-client)
 
 A **new way** to manage your private repository 
 
@@ -14,7 +15,7 @@ Ltk need a ltk server to host the information about your private packages
 Informations are saved as json like this
 ```
 "name": "ltk-test",
-      "url": "git@bitbucket.org:lotrek-tea/ltk-test.git",
+      "url": "git@github.com:ltkpm/ltk-test.git",
       "type": "node",
       "version": 1,
       "hash": "6ca47b2cb4d6a1886a6d2ca7d0cf1843450aff12478b7e8d9e10cbed18a81454d8c486c6aff6830428a16bfcd569628d9727924a03d5de8f2a8c632b87830e74"

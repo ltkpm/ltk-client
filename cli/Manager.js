@@ -81,7 +81,7 @@ class Manager {
       result = gitPrefix + repo_url
     } else if (repo_url.includes("git@")) {
       result =
-        gitPrefix + sshPrefix + "git@bitbucket.org:lotrek-tea/ltk-test.git"
+        gitPrefix + sshPrefix + repo_url
     }
     return result
   }
