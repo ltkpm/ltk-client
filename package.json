@@ -1,5 +1,5 @@
 {
-  "name": "ltk",
+  "name": "ltk-cli",
   "version": "1.0.1",
   "description": "Ltk client for private repo system",
   "main": "index.js",
@@ -7,7 +7,9 @@
   "author": "Lotrèk Digital Agency",
   "license": "MIT",
   "preferGlobal": true,
-  "bin": "./index.js",
+  "bin": {
+    "ltk": "./index.js"
+  },
   "dependencies": {
     "axios": "^0.17.1",
     "commander": "^2.12.2",
