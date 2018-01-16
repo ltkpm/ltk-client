@@ -35,6 +35,12 @@ class Preferences {
     }
   }
 
+  createFolder() {
+    if (!fs.existsSync(this.path)) {
+      fs.mkdirSync(this.path)
+    }
+  }
+
   fileExist() {
     if (fs.existsSync(this.path + this.file_name)) {
       return true
