@@ -71,12 +71,13 @@ describe("Test ltk init", () => {
     preference = new PreferenceManager()
   })
 
-  it("Create preferences File", () => {
+  it("Create preferences File", (done) => {
     let path = preference.path + preference.file_name
     preference.deletePreferences()
     let promiseWrite = preference.savePreferences(JSON.stringify(defaultPref))
     promiseWrite.then(() => {
       expect(fs.existsSync(path)).to.equal(true)
+      done()
     })
   })
 
