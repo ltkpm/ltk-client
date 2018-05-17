@@ -27,7 +27,7 @@ describe("[Node] Test install package", function() {
   it("[Node] Add ltk-test dependency", function(done) {
     const testPackage = {
       name: "ltk-test",
-      url: "https://github.com/ltkpm/ltk-client",
+      url: "https://github.com/ltkpm/ltk-test",
       type: "node",
       version: 1,
       hash:
@@ -94,7 +94,7 @@ describe("[Node] Remove dependencies", () => {
     backup_file = require("../package.json")
     let tmp_file = backup_file
     backup_file = JSON.stringify(backup_file)
-    tmp_file.dependencies["ltk-test"] = "https://github.com/ltkpm/ltk-client"
+    tmp_file.dependencies["ltk-test"] = "https://github.com/ltkpm/ltk-test"
     fs.writeFileSync("package.json", JSON.stringify(tmp_file, null, ""))
     packageManager = new Manager()
     packageManager.preference.node = "npm"
